@@ -1,0 +1,323 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --nox-bg: #0a0a0a;
+  --nox-panel: #141414;
+  --nox-panel-border: #232323;
+  --nox-accent: #ff2d55;
+  --nox-text: #f5f5f5;
+  --nox-text-dim: #999999;
+}
+
+body.nox-theme-abysse {
+  --nox-bg: #05070f;
+  --nox-panel: #0b0e1a;
+  --nox-panel-border: #1b2440;
+  --nox-accent: #3b82f6;
+}
+
+body.nox-theme-aube {
+  --nox-bg: #f4f4f7;
+  --nox-panel: #ffffff;
+  --nox-panel-border: #dcdce2;
+  --nox-accent: #ff2d55;
+  --nox-text: #141414;
+  --nox-text-dim: #55555f;
+}
+
+body.nox-theme-ambre {
+  --nox-accent: #ff9f1c;
+}
+
+body.nox-theme-emeraude {
+  --nox-accent: #10b981;
+}
+
+body.nox-theme-violette {
+  --nox-accent: #a855f7;
+}
+
+body.nox-theme-cyan {
+  --nox-accent: #06b6d4;
+}
+
+body.nox-theme-or {
+  --nox-accent: #eab308;
+}
+
+body {
+  width: 300px;
+  background: var(--nox-bg);
+  color: var(--nox-text);
+  font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* ============================= Menu façon Wii ============================= */
+
+.wii-menu {
+  position: relative;
+  padding: 16px;
+  padding-bottom: 42px;
+  animation: noxAppIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Le menu façon Wii garde toujours sa propre palette, indépendante du
+     thème choisi dans Paramètres pour le dashboard / l'appli Better
+     Youtube : on fige ici des variables locales qui écrasent celles
+     posées plus haut par body.nox-theme-*. */
+  --nox-bg: #0a0a0a;
+  --nox-accent: #ff2d55;
+  --nox-text: #f5f5f5;
+  --nox-text-dim: #999999;
+  --nox-panel-border: #232323;
+  --wii-tile-empty-border: #2c2c2c;
+
+  background: radial-gradient(circle at 50% 0%, #1a2a3d 0%, var(--nox-bg) 70%);
+  color: var(--nox-text);
+}
+
+.wii-menu.wii-light {
+  --nox-bg: #ffffff;
+  --nox-text: #141414;
+  --nox-text-dim: #55555f;
+  --nox-panel-border: #d8d8e2;
+  --wii-tile-empty-border: #d8d8e2;
+
+  background: radial-gradient(circle at 50% 0%, #eef1f7 0%, var(--nox-bg) 70%);
+}
+
+.wii-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.wii-menu-title {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--nox-text);
+}
+
+.wii-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.wii-tile {
+  position: relative;
+  height: 78px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  overflow: hidden;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.18s ease;
+}
+
+.wii-tile-empty {
+  background: transparent;
+  border: 2px dashed var(--wii-tile-empty-border);
+}
+
+.wii-tile-soon {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--nox-text-dim);
+  text-align: center;
+}
+
+.wii-tile-active {
+  background: transparent;
+  border: 3px solid var(--nox-panel-border);
+}
+
+.wii-tile-active .wii-tile-icon img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  border-radius: 100%;
+}
+
+/* Petit "wobble" façon chaîne Wii au survol, sur tous les cadres */
+.wii-tile:hover {
+  transform: scale(1.08);
+  border-color: var(--nox-accent);
+  animation: wiiWobble 0.5s ease-in-out infinite;
+}
+
+.wii-tile:active {
+  transform: scale(0.96);
+  animation: none;
+}
+
+.wii-mode-toggle {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--nox-text-dim);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.wii-mode-toggle svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wii-mode-toggle:hover {
+  color: var(--nox-accent);
+  transform: scale(1.15);
+}
+
+@keyframes wiiWobble {
+  0%, 100% { transform: scale(1.08) rotate(0deg); }
+  25% { transform: scale(1.08) rotate(-1.2deg); }
+  75% { transform: scale(1.08) rotate(1.2deg); }
+}
+
+/* ============================= Vue NOX (ancien popup) ============================= */
+
+.nox-app {
+  display: none;
+  padding: 20px;
+  text-align: center;
+  animation: noxAppIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nox-app.nox-visible {
+  display: block;
+}
+
+.nox-back-btn {
+  display: block;
+  margin-bottom: 12px;
+  background: none;
+  border: none;
+  color: var(--nox-text-dim);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+}
+
+.nox-back-btn:hover {
+  color: var(--nox-text);
+}
+
+@keyframes noxAppIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nox-header {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #1c1c1c;
+}
+
+.nox-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.nox-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.nox-tagline {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  margin-top: 2px;
+}
+
+.nox-toggle-section {
+  margin-bottom: 16px;
+}
+
+.nox-big-toggle {
+  width: 100%;
+  height: 90px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--nox-accent);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.nox-big-toggle:active {
+  transform: scale(0.96);
+}
+
+.nox-big-toggle.nox-off {
+  background-color: #2b2b2b;
+}
+
+.nox-big-toggle-label {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.nox-big-toggle-state {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.nox-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.nox-stats-link {
+  width: 100%;
+  background: var(--nox-panel);
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.nox-stats-link:active {
+  transform: scale(0.96);
+}

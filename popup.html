@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>NOX</title>
+  <link rel="icon" href="icons/icon48.png" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <div class="wii-menu" id="wii-menu-view">
+    <header class="wii-menu-header">
+      <span class="wii-menu-title">NOX</span>
+    </header>
+
+    <div class="wii-grid">
+      <button class="wii-tile wii-tile-active" id="tile-baytb" title="Better Youtube — recommandations YouTube réinventées">
+        <span class="wii-tile-icon">
+          <img src="icons/by-logo.png" alt="Better Youtube" />
+        </span>
+      </button>
+
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+      <div class="wii-tile wii-tile-empty"><span class="wii-tile-soon">Bientôt</span></div>
+    </div>
+
+    <button class="wii-mode-toggle" id="wii-mode-toggle" title="Mode clair / sombre du menu"></button>
+  </div>
+
+  <div class="nox-app" id="nox-app-view">
+    <button id="nox-back-btn" class="nox-back-btn" title="Retour au menu">← Menu</button>
+
+    <header class="nox-header">
+      <img class="nox-header-icon" src="icons/by-logo.png" alt="" />
+      <div class="nox-logo-text">Better Youtube</div>
+      <div class="nox-tagline">Algorithme YouTube</div>
+    </header>
+
+    <section class="nox-toggle-section">
+      <button id="nox-big-toggle" class="nox-big-toggle">
+        <span class="nox-big-toggle-label">ÉTAT</span>
+        <span class="nox-big-toggle-state" id="nox-big-toggle-state">ON</span>
+      </button>
+      <p class="nox-hint">
+        ON = flux reclassé par Better Youtube.<br />
+        OFF = flux YouTube d'origine.
+      </p>
+    </section>
+
+    <button id="nox-stats-link" class="nox-stats-link">
+      Voir mes statistiques →
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

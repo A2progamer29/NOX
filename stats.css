@@ -1,0 +1,1650 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --nox-bg: #0a0a0a;
+  --nox-panel: rgba(255, 255, 255, 0.035);
+  --nox-panel-border: rgba(255, 255, 255, 0.08);
+  --nox-accent: #ff2d55;
+  --nox-accent-soft: rgba(255, 45, 85, 0.35);
+  --nox-text: #f5f5f5;
+  --nox-text-dim: #999999;
+  --nox-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Surfaces "encastrées" (cartes, lignes, champs) : toujours un ton qui
+     s'écarte du fond dans la même direction que --nox-panel, pour que
+     chaque thème reste lisible de façon cohérente au lieu de mélanger des
+     surperpositions noires et blanches selon les endroits. */
+  --nox-surface: rgba(255, 255, 255, 0.06);
+  --nox-surface-strong: rgba(255, 255, 255, 0.1);
+  --nox-border-hover: rgba(255, 255, 255, 0.14);
+}
+
+body {
+  background: var(--nox-bg);
+  color: var(--nox-text);
+  font-family: 'Fredoka', 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--nox-accent-soft);
+  border-radius: 999px;
+}
+
+.nox-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  color: var(--nox-text-dim);
+  font-size: 13px;
+}
+
+/* Colonne centrale à taille fixe, toujours la même quelle que soit la fenêtre */
+.nox-page-wrap {
+  width: 860px;
+  min-width: 860px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--nox-bg);
+}
+
+.nox-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 0 20px;
+  border-bottom: 1px solid var(--nox-panel-border);
+  animation: noxDropIn 0.5s var(--nox-ease);
+}
+
+.nox-header-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.nox-nav-tab {
+  background: transparent;
+  border: none;
+  color: var(--nox-text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nox-nav-tab:hover {
+  color: var(--nox-text);
+}
+
+.nox-nav-tab-active {
+  background: var(--nox-accent);
+  color: #ffffff;
+}
+
+/* ---------------------- Changelog ---------------------- */
+
+.nox-changelog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.nox-changelog-entry {
+  border-left: 2px solid var(--nox-panel-border);
+  padding-left: 18px;
+  animation: noxFadeIn 0.4s var(--nox-ease) both;
+}
+
+.nox-changelog-version {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--nox-accent);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nox-changelog-current {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--nox-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.nox-changelog-changes {
+  list-style: disc;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--nox-text-dim);
+  line-height: 1.6;
+}
+
+.nox-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nox-brand-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--nox-accent);
+}
+
+.nox-brand-name-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.nox-brand-name-btn:hover {
+  opacity: 0.8;
+}
+
+.nox-brand-tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  color: var(--nox-text-dim);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.nox-main {
+  flex: 1;
+  padding: 36px 24px 60px;
+}
+
+.nox-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.nox-hero-card {
+  background: var(--nox-panel);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 14px;
+  padding: 18px 10px;
+  text-align: center;
+  transition: transform 0.3s var(--nox-ease), border-color 0.3s ease;
+}
+
+.nox-hero-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--nox-accent-soft);
+}
+
+.nox-hero-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--nox-accent);
+}
+
+.nox-hero-label {
+  display: block;
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  margin-top: 6px;
+}
+
+/* ---------------------- Odomètre "roulette" pour les chiffres clés ---------------------- */
+
+.nox-odometer {
+  display: inline-flex;
+  align-items: center;
+}
+
+.nox-odometer-char {
+  position: relative;
+  height: 32px;
+  width: 19px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.nox-odometer-char[data-type="sym"] {
+  overflow: visible;
+  width: auto;
+  padding: 0 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  vertical-align: middle;
+}
+
+.nox-odometer-reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.7s var(--nox-ease);
+}
+
+.nox-odometer-digit {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  line-height: 1;
+}
+
+/* ---------------------- Panneaux ---------------------- */
+
+.nox-panel {
+  background: var(--nox-panel);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--nox-panel-border);
+  border-radius: 14px;
+  padding: 26px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease;
+}
+
+.nox-panel:hover {
+  border-color: var(--nox-border-hover);
+}
+
+.nox-panel-anim {
+  animation: noxRiseIn 0.5s var(--nox-ease) both;
+}
+
+@keyframes noxRiseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes noxDropIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nox-panel h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.nox-panel-sub {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  opacity: 0.7;
+  margin-bottom: 18px;
+}
+
+.nox-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nox-bars-scroll {
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 14px;
+  margin-right: -14px;
+}
+
+.nox-bars-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nox-bars-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nox-bars-scroll::-webkit-scrollbar-thumb {
+  background: var(--nox-accent-soft);
+  border-radius: 999px;
+}
+
+.nox-bar-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 50px;
+  align-items: center;
+  gap: 12px;
+}
+
+.nox-bar-label {
+  font-size: 13px;
+  color: var(--nox-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nox-bar-track {
+  background: var(--nox-surface-strong);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 6px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.nox-bar-fill {
+  height: 100%;
+  background: var(--nox-accent);
+  transition: width 0.7s var(--nox-ease);
+}
+
+.nox-bar-value {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  text-align: right;
+}
+
+.nox-proposed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.nox-proposed-card {
+  display: block;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s ease, transform 0.3s var(--nox-ease), box-shadow 0.3s ease;
+}
+
+.nox-proposed-card:hover {
+  border-color: var(--nox-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.nox-proposed-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+  background: var(--nox-surface);
+  transition: transform 0.4s ease;
+}
+
+.nox-proposed-card:hover img {
+  transform: scale(1.04);
+}
+
+.nox-proposed-card-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  padding: 8px 10px 2px;
+  line-height: 1.35;
+  max-height: 52px;
+  overflow: hidden;
+  color: var(--nox-text);
+}
+
+.nox-proposed-card-duration {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nox-accent);
+  padding: 4px 10px 0;
+}
+
+.nox-proposed-card-channel {
+  font-size: 11px;
+  color: var(--nox-text-dim);
+  padding: 2px 10px 10px;
+}
+
+.nox-video-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 14px;
+  margin-right: -14px;
+}
+
+.nox-video-stats::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nox-video-stats::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nox-video-stats::-webkit-scrollbar-thumb {
+  background: var(--nox-accent-soft);
+  border-radius: 999px;
+}
+
+.nox-video-stat-row {
+  display: block;
+  grid-template-columns: 1fr 160px 90px;
+  align-items: center;
+  gap: 16px;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  min-height: 60px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s ease, transform 0.25s var(--nox-ease);
+}
+
+a.nox-video-stat-row {
+  display: grid;
+}
+
+.nox-video-stat-row:hover {
+  border-color: var(--nox-accent);
+  transform: translateX(3px);
+}
+
+.nox-video-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.nox-video-stat-title {
+  font-size: 14px;
+  color: var(--nox-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nox-video-stat-meta {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+}
+
+.nox-video-stat-duration {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.nox-fade-in {
+  animation: noxFadeIn 0.45s var(--nox-ease) both;
+}
+
+/* ---------------------- Page Classement ---------------------- */
+
+.nox-ranking-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0 20px;
+}
+
+.nox-ranking-tab {
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text-dim);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.nox-ranking-tab:hover {
+  color: var(--nox-text);
+  border-color: var(--nox-accent);
+}
+
+.nox-ranking-tab-active {
+  background: var(--nox-accent);
+  border-color: var(--nox-accent);
+  color: #ffffff;
+}
+
+.nox-ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nox-ranking-row {
+  display: grid;
+  grid-template-columns: 32px 90px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  transition: border-color 0.25s ease, transform 0.25s var(--nox-ease);
+}
+
+.nox-ranking-row:hover {
+  border-color: var(--nox-accent);
+  transform: translateX(3px);
+}
+
+.nox-ranking-rank {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--nox-accent);
+  text-align: center;
+}
+
+.nox-ranking-thumb {
+  width: 90px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--nox-surface);
+}
+
+.nox-ranking-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.nox-ranking-title {
+  font-size: 14px;
+  color: var(--nox-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nox-ranking-channel {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+}
+
+.nox-ranking-metric {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nox-text);
+  white-space: nowrap;
+}
+
+@keyframes noxFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nox-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.nox-table th {
+  text-align: left;
+  color: var(--nox-text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--nox-panel-border);
+}
+
+.nox-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--nox-panel-border);
+  color: var(--nox-text);
+}
+
+.nox-table tr.nox-table-link-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nox-table tr.nox-table-link-row:hover {
+  background-color: var(--nox-surface);
+}
+
+.nox-table td.channel-cell {
+  color: var(--nox-text-dim);
+}
+
+.nox-panel-centered {
+  text-align: center;
+}
+
+.nox-panel-centered .nox-panel-sub {
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.nox-reset-btn {
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text-dim);
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.nox-reset-btn:hover {
+  border-color: var(--nox-accent);
+  color: var(--nox-text);
+  transform: translateY(-2px);
+}
+
+.nox-footer {
+  text-align: center;
+  padding: 24px 20px;
+  border-top: 1px solid var(--nox-panel-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.nox-footer-text {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+}
+
+.nox-highlight {
+  color: var(--nox-accent);
+  font-weight: 700;
+}
+
+.nox-empty {
+  margin-bottom: 0;
+}
+
+.nox-footer-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nox-footer-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nox-footer-group-left {
+  justify-content: flex-start;
+}
+
+.nox-footer-group-right {
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.nox-footer-discord-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #5865F2;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nox-footer-discord-icon:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.nox-footer-coffee-icon {
+  color: #FFDD00;
+}
+
+.nox-footer-info-btn {
+  background: transparent;
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text-dim);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.nox-footer-info-btn:hover {
+  color: var(--nox-text);
+  border-color: var(--nox-accent);
+  transform: translateY(-2px);
+}
+
+/* ---------------------- Graphique de la page Analyse ---------------------- */
+
+.nox-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.nox-chart-label {
+  font-size: 7px;
+  fill: var(--nox-text-dim);
+}
+
+.nox-chart-axis-label {
+  font-size: 7px;
+  fill: var(--nox-text-dim);
+}
+
+.nox-chart-grid {
+  stroke: var(--nox-panel-border);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.nox-insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nox-insight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.nox-insight-label {
+  font-size: 13px;
+  color: var(--nox-text-dim);
+  font-weight: 700;
+}
+
+.nox-insight-value {
+  font-size: 13px;
+  color: var(--nox-text);
+  text-align: right;
+}
+
+/* ---------------------- FAQ ---------------------- */
+
+.nox-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nox-faq-item {
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--nox-surface);
+}
+
+.nox-faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  color: var(--nox-text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  padding: 16px 18px;
+  cursor: pointer;
+}
+
+.nox-faq-chevron {
+  color: var(--nox-accent);
+  transition: transform 0.25s ease;
+}
+
+.nox-faq-chevron-open {
+  transform: rotate(180deg);
+}
+
+.nox-faq-answer {
+  padding: 0 18px 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--nox-text-dim);
+  animation: noxFadeIn 0.3s var(--nox-ease);
+}
+
+.nox-faq-answer a {
+  color: var(--nox-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nox-faq-answer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------- Modal Tutoriel ---------------------- */
+
+.nox-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: noxOverlayIn 0.25s ease;
+}
+
+@keyframes noxOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.nox-modal-overlay.nox-visible {
+  display: flex;
+}
+
+.nox-modal-anim {
+  animation: noxModalIn 0.35s var(--nox-ease);
+}
+
+@keyframes noxModalIn {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.nox-modal {
+  background: var(--nox-panel, #141414);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 14px;
+  width: 90%;
+  max-width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.nox-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nox-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nox-modal::-webkit-scrollbar-thumb {
+  background: var(--nox-accent-soft);
+  border-radius: 999px;
+}
+
+.nox-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--nox-panel-border);
+}
+
+.nox-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.nox-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--nox-text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nox-modal-close:hover {
+  color: var(--nox-accent);
+  transform: rotate(90deg);
+}
+
+/* ---------------------- Récap "wrapped" ---------------------- */
+
+.nox-wrapped-modal {
+  position: relative;
+  background: var(--nox-panel, #141414);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 14px;
+  width: 90%;
+  max-width: 420px;
+  padding: 32px 28px 22px;
+  text-align: center;
+}
+
+.nox-wrapped-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--nox-text-dim);
+  margin-bottom: 18px;
+}
+
+.nox-wrapped-slide {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: noxFadeIn 0.35s var(--nox-ease) both;
+}
+
+.nox-wrapped-slide-big {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--nox-accent);
+  word-break: break-word;
+}
+
+.nox-wrapped-slide-caption {
+  font-size: 14px;
+  color: var(--nox-text-dim);
+  line-height: 1.5;
+}
+
+.nox-modal-body {
+  padding: 22px;
+  min-height: 180px;
+}
+
+.nox-modal-body h3 {
+  font-size: 22px;
+  color: var(--nox-accent);
+  margin-bottom: 14px;
+}
+
+.nox-slide-content {
+  animation: noxFadeIn 0.35s var(--nox-ease) both;
+}
+
+.nox-slide-content p {
+  font-size: 17px;
+  color: var(--nox-text);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.nox-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-top: 1px solid var(--nox-panel-border);
+}
+
+.nox-guide-footer {
+  padding: 18px 0 0;
+  margin-top: 18px;
+  border-top: 1px solid var(--nox-panel-border);
+}
+
+.nox-nav-btn {
+  background: transparent;
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.nox-nav-btn:hover {
+  border-color: var(--nox-accent);
+}
+
+.nox-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.nox-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.nox-dot.nox-dot-active {
+  background: var(--nox-accent);
+  transform: scale(1.25);
+}
+
+/* ---------------------- Popup de confirmation première visite ---------------------- */
+
+.nox-confirm-box {
+  background: var(--nox-panel, #141414);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 14px;
+  padding: 28px;
+  max-width: 380px;
+  text-align: center;
+}
+
+.nox-confirm-text {
+  font-size: 15px;
+  color: var(--nox-text);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.nox-confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.nox-confirm-yes {
+  background: var(--nox-accent);
+  border: none;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nox-confirm-yes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--nox-accent-soft);
+}
+
+.nox-confirm-no {
+  background: transparent;
+  border: 1px solid var(--nox-panel-border);
+  color: var(--nox-text-dim);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---------------------- Transition entre pages (fondu) ---------------------- */
+
+.nox-view-fade {
+  animation: noxFadeIn 0.3s ease;
+}
+
+.nox-carousel-panel {
+  width: 100%;
+}
+
+/* ---------------------- Thèmes ---------------------- */
+
+.nox-theme-abysse {
+  --nox-bg: #05070f;
+  --nox-accent: #3b82f6;
+  --nox-accent-soft: rgba(59, 130, 246, 0.35);
+  --nox-text-dim: #93a3c9;
+}
+
+.nox-theme-aube {
+  --nox-bg: #f4f4f7;
+  --nox-text: #141414;
+  --nox-text-dim: #5a5a5a;
+  --nox-panel: rgba(0, 0, 0, 0.035);
+  --nox-panel-border: rgba(0, 0, 0, 0.12);
+  --nox-surface: rgba(0, 0, 0, 0.045);
+  --nox-surface-strong: rgba(0, 0, 0, 0.08);
+  --nox-border-hover: rgba(0, 0, 0, 0.22);
+  --nox-accent: #ff2d55;
+  --nox-accent-soft: rgba(255, 45, 85, 0.25);
+}
+
+.nox-theme-ambre {
+  --nox-accent: #ff9f1c;
+  --nox-accent-soft: rgba(255, 159, 28, 0.35);
+}
+
+.nox-theme-emeraude {
+  --nox-accent: #10b981;
+  --nox-accent-soft: rgba(16, 185, 129, 0.35);
+}
+
+.nox-theme-violette {
+  --nox-accent: #a855f7;
+  --nox-accent-soft: rgba(168, 85, 247, 0.35);
+}
+
+.nox-theme-cyan {
+  --nox-accent: #06b6d4;
+  --nox-accent-soft: rgba(6, 182, 212, 0.35);
+}
+
+.nox-theme-or {
+  --nox-accent: #eab308;
+  --nox-accent-soft: rgba(234, 179, 8, 0.35);
+}
+
+.nox-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.nox-theme-card {
+  background: var(--nox-surface);
+  border: 2px solid var(--nox-panel-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  font-family: inherit;
+}
+
+.nox-theme-card:hover {
+  transform: translateY(-2px);
+}
+
+.nox-theme-card-active {
+  border-color: var(--nox-accent);
+}
+
+.nox-theme-swatch {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0a0a0a, #ff2d55);
+}
+
+.nox-theme-swatch.nox-theme-abysse {
+  background: linear-gradient(135deg, #05070f, #3b82f6);
+}
+
+.nox-theme-swatch.nox-theme-aube {
+  background: linear-gradient(135deg, #f4f4f7, #ff2d55);
+}
+
+.nox-theme-swatch.nox-theme-ambre {
+  background: linear-gradient(135deg, #0a0a0a, #ff9f1c);
+}
+
+.nox-theme-swatch.nox-theme-emeraude {
+  background: linear-gradient(135deg, #0a0a0a, #10b981);
+}
+
+.nox-theme-swatch.nox-theme-violette {
+  background: linear-gradient(135deg, #0a0a0a, #a855f7);
+}
+
+.nox-theme-swatch.nox-theme-cyan {
+  background: linear-gradient(135deg, #0a0a0a, #06b6d4);
+}
+
+.nox-theme-swatch.nox-theme-or {
+  background: linear-gradient(135deg, #0a0a0a, #eab308);
+}
+
+.nox-theme-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nox-text);
+}
+
+.nox-theme-desc {
+  font-size: 11px;
+  color: var(--nox-text-dim);
+}
+
+/* ---------------------- Switch (Paramètres) ---------------------- */
+
+.nox-switch {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--nox-surface-strong);
+  border: 2px solid var(--nox-panel-border);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.nox-switch-on {
+  background: var(--nox-accent);
+}
+
+.nox-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.nox-switch-on .nox-switch-knob {
+  transform: translateX(20px);
+}
+
+/* ---------------------- Chaîne cliquable ---------------------- */
+
+.nox-channel-link {
+  text-decoration: none;
+  color: var(--nox-text-dim);
+  cursor: pointer;
+}
+
+.nox-channel-link:hover {
+  color: var(--nox-accent);
+  text-decoration: underline;
+}
+
+/* ---------------------- Habitudes façon "wrapped" ---------------------- */
+
+.nox-wrapped-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.nox-wrapped-card {
+  background: #202020;
+  border: 2px solid var(--nox-panel-border);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nox-wrapped-big {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--nox-accent);
+}
+
+.nox-wrapped-caption {
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  line-height: 1.4;
+}
+
+/* ---------------------- Changelog : date discrète ---------------------- */
+
+.nox-changelog-date {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--nox-text-dim);
+  opacity: 0.55;
+}
+
+/* ---------------------- Formulaire signaler un bug ---------------------- */
+
+.nox-bug-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nox-bug-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--nox-text-dim);
+  font-weight: 700;
+}
+
+.nox-bug-input,
+.nox-bug-textarea {
+  background: var(--nox-surface);
+  border: 2px solid var(--nox-panel-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--nox-text);
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.nox-bug-input:focus,
+.nox-bug-textarea:focus {
+  outline: none;
+  border-color: var(--nox-accent);
+}
+
+/* ---------------------- Taille du bouton + aperçu ---------------------- */
+
+.nox-size-options {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.nox-size-option {
+  flex: 1;
+  background: var(--nox-surface);
+  border: 2px solid var(--nox-panel-border);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--nox-text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nox-size-option-active {
+  border-color: var(--nox-accent);
+  color: var(--nox-text);
+}
+
+.nox-size-preview-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: var(--nox-surface);
+  border-radius: 12px;
+}
+
+.nox-size-preview-btn {
+  background: var(--nox-accent);
+  border-radius: 14px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.25s ease, height 0.25s ease;
+}
+
+.nox-size-preview-title {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.nox-size-preview-state {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ---------------------- Position horizontale du bouton ---------------------- */
+
+.nox-position-track {
+  position: relative;
+  /* Même gabarit que .nox-size-preview-wrap : 20px de marge de chaque côté
+     de la plus grande taille de bouton possible (Grand = 102px), pour que
+     l'aperçu de position affiche le bouton à sa vraie taille, jamais rogné. */
+  height: 142px;
+  padding: 20px 0;
+  background: var(--nox-surface);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.nox-position-puck {
+  position: absolute;
+  top: 50%;
+  border-radius: 14px;
+  background: var(--nox-accent);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.nox-position-puck-title {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.nox-position-puck-state {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nox-position-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--nox-panel-border);
+  outline: none;
+  cursor: pointer;
+}
+
+.nox-position-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--nox-accent);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+.nox-position-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--nox-accent);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+/* ---------------------- Poids de l'algorithme ---------------------- */
+
+.nox-weights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.nox-weight-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.nox-weight-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nox-accent);
+}
+
+.nox-weights-reset {
+  width: 100%;
+}
+
+/* ---------------------- Liste noire ---------------------- */
+
+.nox-blacklist-block {
+  margin-bottom: 18px;
+}
+
+.nox-blacklist-block .nox-insight-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.nox-blacklist-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.nox-blacklist-input-row .nox-bug-input {
+  flex: 1;
+}
+
+.nox-blacklist-add {
+  margin: 0;
+  white-space: nowrap;
+  padding: 10px 16px;
+}
+
+.nox-blacklist-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nox-blacklist-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nox-surface);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 999px;
+  padding: 6px 8px 6px 12px;
+  font-size: 12px;
+  color: var(--nox-text);
+}
+
+.nox-blacklist-tag button {
+  background: transparent;
+  border: none;
+  color: var(--nox-text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px;
+  line-height: 1;
+}
+
+.nox-blacklist-tag button:hover {
+  color: var(--nox-accent);
+}
+
+/* ---------------------- Raccourcis clavier ---------------------- */
+
+.nox-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.nox-shortcut-row {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nox-shortcut-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nox-shortcut-kbd {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nox-text);
+  background: var(--nox-surface-strong);
+  border: 1px solid var(--nox-panel-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-width: 120px;
+  text-align: center;
+}
+
+.nox-shortcut-edit {
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 12px;
+  white-space: nowrap;
+}
