@@ -1,0 +1,19 @@
+{
+  "name": "nox-build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.jsx --bundle --minify --outfile=stats.bundle.js --loader:.js=jsx && esbuild src/guide-index.jsx --bundle --minify --outfile=guide.bundle.js --loader:.js=jsx && esbuild src/faq-index.jsx --bundle --minify --outfile=faq.bundle.js --loader:.js=jsx && esbuild src/bugreport-index.jsx --bundle --minify --outfile=bugreport.bundle.js --loader:.js=jsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
